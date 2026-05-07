@@ -6,6 +6,20 @@ import { test, expect } from "@playwright/test";
 const primaryButton = (page: import("@playwright/test").Page) => page.locator("button.btn-primary");
 const primaryLink = (page: import("@playwright/test").Page) => page.locator("a.btn-primary");
 
+// CardSpread renders three layouts and toggles them via media-query display:
+// `.dealCard` is used inside the desktop flex row AND the tablet scroll row;
+// `.dealCardGrid` is used inside the phone 2×2 grid. Match both so a single
+// helper works at every viewport.
+const spreadCards = (page: import("@playwright/test").Page) =>
+  page.locator(".dealCard:visible, .dealCardGrid:visible");
+
+// Phones get 4 cards (2×2 grid); tablet & desktop get 5 (full peek). Read the
+// active viewport width to pick the right count — playwright.config.ts ships
+// two projects (1440-wide chromium, 375-wide iphone-se) so this branch covers
+// both without a manual project name check.
+const expectedCardCount = (page: import("@playwright/test").Page) =>
+  (page.viewportSize()?.width ?? 1440) < 768 ? 4 : 5;
+
 // End-to-end happy path — the core PRD user journey:
 // Landing → Deck → Shuffle → Pick → Detail → "Витягнути ще" → Deck.
 test("main flow: pick a card and return to deck", async ({ page }) => {
@@ -20,18 +34,17 @@ test("main flow: pick a card and return to deck", async ({ page }) => {
   await expect(page.getByRole("heading", { name: /ТАСУЙ ЩОБ ОБРАТИ КАРТУ/i })).toBeVisible();
   await expect(primaryButton(page)).toBeVisible();
 
-  // ── 3. Shuffle → spread of 5 cards ──
+  // ── 3. Shuffle → spread (5 cards on desktop/tablet, 4 on phone grid) ──
   await primaryButton(page).click();
   await expect(page.getByRole("heading", { name: /ОБИРАЙ СВОЮ КАРТУ/i })).toBeVisible({ timeout: 5000 });
 
-  // CardSpread renders TWO containers (desktop xl:flex / mobile xl:hidden) and
-  // hides the wrong one with display:none, so the DOM has 10 .dealCard nodes.
-  // Filter to visible ones — should be exactly 5 at any viewport.
-  const visibleCards = page.locator(".dealCard:visible");
-  await expect(visibleCards).toHaveCount(5);
+  const visibleCards = spreadCards(page);
+  await expect(visibleCards).toHaveCount(expectedCardCount(page));
 
-  // ── 4. Pick the centre card → navigate to detail ──
-  await visibleCards.nth(2).click();
+  // ── 4. Pick the first card → navigate to detail.
+  // `.first()` works on both layouts; the centre-of-five only exists on
+  // desktop/tablet, so we don't try to be clever about position. ──
+  await visibleCards.first().click();
   await expect(page).toHaveURL(/\/card\/card-\d+$/);
 
   // The card flip animation auto-runs after ~400ms; the card name should be
@@ -57,7 +70,7 @@ test("history captures drawn cards and opens the detail popup", async ({ page, c
   await page.goto("/deck");
   await primaryButton(page).click();
   await expect(page.getByRole("heading", { name: /ОБИРАЙ СВОЮ КАРТУ/i })).toBeVisible();
-  await page.locator(".dealCard:visible").first().click();
+  await spreadCards(page).first().click();
   await expect(page).toHaveURL(/\/card\/card-\d+$/);
 
   // Navigate to History via the Header link
