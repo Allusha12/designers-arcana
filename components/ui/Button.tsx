@@ -25,7 +25,7 @@ export default function Button({
     <>
       <span
         style={{
-          fontFamily: "'Cormorant Garamond', Georgia, serif",
+          fontFamily: "var(--font-display)",
           fontStyle: "italic",
           fontSize: 18,
         }}
@@ -35,7 +35,7 @@ export default function Button({
       <span className="text-btn">{label}</span>
       <span
         style={{
-          fontFamily: "'Cormorant Garamond', Georgia, serif",
+          fontFamily: "var(--font-display)",
           fontStyle: "italic",
           fontSize: 18,
         }}

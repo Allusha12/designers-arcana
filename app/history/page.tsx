@@ -55,7 +55,7 @@ export default function HistoryPage() {
           <p
             className="mt-3"
             style={{
-              fontFamily: "'PT Serif', Georgia, serif",
+              fontFamily: "var(--font-serif)",
               fontSize: 20,
               color: "rgba(185,175,185,1)",
               lineHeight: 1.5,

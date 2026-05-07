@@ -1,5 +1,32 @@
 import type { Metadata, Viewport } from "next";
+import { Cormorant_Garamond, Open_Sans, PT_Serif } from "next/font/google";
 import "./globals.css";
+
+// Self-hosted Google Fonts — Next.js downloads them at build time and serves
+// them from Vercel's CDN. Eliminates the Cormorant FOUT (flash of fallback
+// serif) we saw on the Vercel preview, and removes the runtime request to
+// fonts.googleapis.com that was hurting CLS / LCP.
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ["latin", "cyrillic"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const openSans = Open_Sans({
+  subsets: ["latin", "cyrillic"],
+  weight: ["300", "400", "600"],
+  variable: "--font-opensans",
+  display: "swap",
+});
+
+const ptSerif = PT_Serif({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "700"],
+  variable: "--font-ptserif",
+  display: "swap",
+});
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://designers-arcana.app";
 const SITE_NAME = "The Designer's Arcana";
@@ -51,7 +78,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="uk">
+    <html
+      lang="uk"
+      className={`${cormorantGaramond.variable} ${openSans.variable} ${ptSerif.variable}`}
+    >
       <body className="min-h-screen bg-[#000000] text-[#f4eccb] overflow-x-hidden">
         {children}
       </body>

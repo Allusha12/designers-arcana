@@ -39,9 +39,10 @@ const config: Config = {
         },
       },
       fontFamily: {
-        // Sourced from Figma — Cormorant Garamond + Open Sans
-        display: ["'Cormorant Garamond'", "Georgia", "serif"],
-        body:    ["'Open Sans'", "system-ui", "sans-serif"],
+        // Resolved through CSS variables exposed by next/font (see app/layout.tsx).
+        display: ["var(--font-cormorant)", "Georgia", "serif"],
+        body:    ["var(--font-opensans)", "system-ui", "sans-serif"],
+        serif:   ["var(--font-ptserif)", "Georgia", "serif"],
         mono:    ["'JetBrains Mono'", "'Fira Code'", "monospace"],
       },
       fontSize: {

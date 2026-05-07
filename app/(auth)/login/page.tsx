@@ -54,7 +54,7 @@ export default function LoginPage() {
               borderColor: "rgba(200,168,97,0.45)",
               background: "rgba(10,5,7,0.6)",
               borderRadius: 999,
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
+              fontFamily: "var(--font-display)",
               fontSize: 15,
               letterSpacing: "0.20em",
               color: "#c8a861",
