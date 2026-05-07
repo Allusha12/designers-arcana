@@ -71,6 +71,11 @@ export default function HistoryPage() {
         <div
           ref={scrollerRef}
           className="flex-1 min-h-0 w-full overflow-y-auto px-[var(--page-padding-x)] pb-16 history-scroller"
+          // a11y: scrollable regions must be keyboard-focusable so users
+          // navigating with Tab + arrows can scroll the history list.
+          tabIndex={0}
+          role="region"
+          aria-label="Історія розкладів"
         >
           {loading ? (
             <div className="h-full flex items-center justify-center">
