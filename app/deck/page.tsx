@@ -6,19 +6,17 @@ import Header from "@/components/layout/Header";
 import CardSpread from "@/components/cards/CardSpread";
 import Button from "@/components/ui/Button";
 import { useDeck } from "@/hooks/useDeck";
-import { useAuth } from "@/hooks/useAuth";
 import { useHistory } from "@/hooks/useHistory";
 
 // Figma: title 44px Cormorant Garamond Medium, gold, 1% ls, centered at y:249
 export default function DeckPage() {
   const router = useRouter();
-  const { user } = useAuth();
-  const { addEntry } = useHistory(user?.uid ?? null);
+  const { addEntry } = useHistory();
   const { phase, spreadSlugs, shuffle, pick } = useDeck();
 
-  async function handlePick(slug: string) {
+  function handlePick(slug: string) {
     pick(slug);               // mark as drawn in deck algorithm
-    await addEntry(slug);     // save to history (localStorage or Firestore)
+    addEntry(slug);           // save to history (localStorage)
     router.push(`/card/${slug}`);
   }
 

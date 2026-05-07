@@ -1,6 +1,5 @@
-// localStorage history — used when user is not authenticated.
-// Keeps the same HistoryEntry shape as Firestore so hooks are interchangeable.
-// drawnAt is stored as an ISO string and hydrated to a plain Date (not Firestore Timestamp).
+// localStorage history — the only persistence layer for the History screen.
+// drawnAt is stored as an ISO string and hydrated to a plain Date.
 
 import type { HistoryEntry } from "@/types";
 
@@ -32,8 +31,7 @@ function toHistoryEntry(e: StoredEntry): HistoryEntry {
   return {
     id: e.id,
     cardSlug: e.cardSlug,
-    // Use a plain Date — compatible with the HistoryItem date formatter
-    drawnAt: new Date(e.drawnAt) as unknown as import("firebase/firestore").Timestamp,
+    drawnAt: new Date(e.drawnAt),
   };
 }
 

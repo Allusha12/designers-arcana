@@ -1,6 +1,6 @@
 "use client";
 // History page — local-only, accessible to all users.
-// Reads/writes localStorage via useHistory(null). No Google sign-in flow.
+// Reads/writes localStorage via useHistory(). No sign-in flow.
 // Figma: title 44px Cormorant Garamond Medium gold, subtitle PT Serif 20px
 //
 // Layout: app-shell. Body scroll is locked (h-screen h-[100dvh] + overflow-hidden) so
@@ -17,7 +17,7 @@ import { useHistory } from "@/hooks/useHistory";
 const SCROLL_THRESHOLD = 12;
 
 export default function HistoryPage() {
-  const { entries, loading, removeEntry } = useHistory(null);
+  const { entries, loading, removeEntry } = useHistory();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [listScrolled, setListScrolled] = useState(false);
 

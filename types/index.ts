@@ -1,5 +1,3 @@
-import type { Timestamp } from "firebase/firestore";
-
 export interface Card {
   id: number;         // 1–32
   slug: string;       // "card-01" … "card-32"
@@ -10,9 +8,9 @@ export interface Card {
 }
 
 export interface HistoryEntry {
-  id: string;         // Firestore document ID
+  id: string;         // local prefix-id (e.g. `local_<ts>_<rand>`)
   cardSlug: string;
-  drawnAt: Timestamp;
+  drawnAt: Date;
 }
 
 export interface DeckState {

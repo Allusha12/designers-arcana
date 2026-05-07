@@ -1,12 +1,11 @@
-// History hook — works both with Firebase (logged-in) and localStorage (guest).
-// If uid is null → uses localStorage via lib/history/localHistory.ts
-// If uid is set  → uses Firestore via lib/firebase/firestore.ts
-// On sign-in, caller can optionally migrate local entries to Firestore (future).
+// History hook — local-only. Reads/writes browser localStorage via
+// lib/history/localHistory.ts. The signature stays a hook so consumers don't
+// have to deal with hydration timing themselves; on the server this returns
+// an empty list, then we hydrate on mount.
 
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { getHistoryEntries, addHistoryEntry, deleteHistoryEntry } from "@/lib/firebase/firestore";
 import {
   localGetHistory,
   localAddEntry,
@@ -14,44 +13,28 @@ import {
 } from "@/lib/history/localHistory";
 import type { HistoryEntry } from "@/types";
 
-export function useHistory(uid: string | null) {
+export function useHistory() {
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const fetchEntries = useCallback(async () => {
-    setLoading(true);
-    if (uid) {
-      const data = await getHistoryEntries(uid);
-      setEntries(data);
-    } else {
-      // Guest mode — read from localStorage (sync, no await needed)
-      setEntries(localGetHistory());
-    }
-    setLoading(false);
-  }, [uid]);
-
+  // Hydrate from localStorage on mount. We start with `loading: true` so the
+  // very first server-rendered HTML doesn't claim an empty list before we've
+  // had a chance to read storage.
   useEffect(() => {
-    fetchEntries();
-  }, [fetchEntries]);
+    setEntries(localGetHistory());
+    setLoading(false);
+  }, []);
 
-  const addEntry = useCallback(async (cardSlug: string) => {
-    if (uid) {
-      await addHistoryEntry(uid, cardSlug);
-      await fetchEntries();
-    } else {
-      const newEntry = localAddEntry(cardSlug);
-      setEntries((prev) => [newEntry, ...prev]);
-    }
-  }, [uid, fetchEntries]);
+  const addEntry = useCallback((cardSlug: string) => {
+    const entry = localAddEntry(cardSlug);
+    setEntries((prev) => [entry, ...prev]);
+    return entry;
+  }, []);
 
-  const removeEntry = useCallback(async (entryId: string) => {
-    if (uid) {
-      await deleteHistoryEntry(uid, entryId);
-    } else {
-      localDeleteEntry(entryId);
-    }
+  const removeEntry = useCallback((entryId: string) => {
+    localDeleteEntry(entryId);
     setEntries((prev) => prev.filter((e) => e.id !== entryId));
-  }, [uid]);
+  }, []);
 
   return { entries, loading, addEntry, removeEntry };
 }

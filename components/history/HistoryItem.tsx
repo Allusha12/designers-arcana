@@ -23,10 +23,7 @@ export default function HistoryItem({ entry, onDelete, onOpen, isVanishing = fal
   const card = getCardBySlug(entry.cardSlug);
   if (!card) return null;
 
-  const date = entry.drawnAt instanceof Date
-    ? entry.drawnAt
-    : (entry.drawnAt as { toDate?: () => Date })?.toDate?.() ?? new Date();
-  const dateStr = date.toLocaleDateString("uk-UA", {
+  const dateStr = entry.drawnAt.toLocaleDateString("uk-UA", {
     day: "numeric", month: "long", year: "numeric",
   });
 
