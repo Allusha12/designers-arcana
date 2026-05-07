@@ -59,8 +59,7 @@ export default function DeckPage() {
               desktop deck-card is 347px (taller than the 329px spread card);
               mobile/tablet deck-card is 222/277px (smaller than 329px). */}
           <div
-            className="flex items-center justify-center w-full"
-            style={{ height: "max(var(--card-height), 329px)" }}
+            className="flex items-center justify-center w-full deck-slot"
           >
             {phase !== "spread" ? (
               <button

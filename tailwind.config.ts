@@ -53,7 +53,7 @@ const config: Config = {
         "body-card":["20px",  { letterSpacing: "0",      lineHeight: "1.55" }],
         "subtitle": ["22px",  { letterSpacing: "0",      lineHeight: "1.4" }],
         "btn":      ["18px",  { letterSpacing: "0.36em", lineHeight: "1" }],
-        "hero-sm":  ["48px",  { letterSpacing: "0.01em", lineHeight: "1" }],
+        "hero-sm":  ["60px",  { letterSpacing: "0.01em", lineHeight: "1" }],
         "hero-md":  ["72px",  { letterSpacing: "0.01em", lineHeight: "1" }],
         "hero-xl":  ["128px", { letterSpacing: "0.01em", lineHeight: "1" }],
       },

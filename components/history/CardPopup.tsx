@@ -63,7 +63,7 @@ export default function CardPopup({ card, onClose }: CardPopupProps) {
     >
       <div className="min-h-full w-full flex items-center justify-center p-3 md:p-6">
         <div
-          className="popup-modal relative w-full max-w-[1040px] flex flex-col md:flex-row gap-5 md:gap-10 lg:gap-14 p-5 md:p-10 lg:p-12"
+          className="popup-modal relative w-full max-w-[1040px] flex flex-col gap-5 md:gap-7 p-5 md:p-10 lg:p-12"
           style={{
             background: "#131211",
             borderRadius: 20,
@@ -72,78 +72,71 @@ export default function CardPopup({ card, onClose }: CardPopupProps) {
           }}
           onClick={(e) => e.stopPropagation()}
         >
-        {/* Close button — placed inside the modal padding on every breakpoint
-            so it doesn't overlap the title at small widths. */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 md:top-8 md:right-10 z-10 nav-link text-nav"
-          aria-label="Закрити"
-        >
-          ЗАКРИТИ
-        </button>
-
-        {/* ── Left: card image, displayed cleanly on dark (no cream panel) ── */}
-        <div className="shrink-0 self-center md:self-start">
-          <div
-            className="relative"
-            style={{
-              width: "min(290px, 70vw)",
-              aspectRatio: "374 / 594",
-              borderRadius: 16,
-              overflow: "hidden",
-              border: "1px solid rgba(200,168,97,0.45)",
-              boxShadow: "0 0 32px rgba(0,0,0,0.55)",
-            }}
-          >
-            <Image
-              src={card.image}
-              alt={card.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 767px) 70vw, 290px"
-              priority
-            />
+          {/* Top row — close button on its own line so it never collides with
+              the card image (mobile) or the title (desktop). */}
+          <div className="flex justify-end">
+            <button
+              onClick={onClose}
+              className="nav-link text-nav"
+              aria-label="Закрити"
+            >
+              ЗАКРИТИ
+            </button>
           </div>
-        </div>
 
-        {/* ── Right: title + sections ── */}
-        <div className="flex-1 min-w-0 flex flex-col gap-7 md:gap-9">
-          {/* Title — only place where the card name appears */}
-          <h2
-            className="font-display font-medium"
-            style={{
-              fontSize: "clamp(28px, 4vw, 44px)",
-              letterSpacing: "0.01em",
-              lineHeight: 1.1,
-              color: "#c8a861",
-              margin: 0,
-            }}
-          >
-            {card.name}
-          </h2>
-
-          {/* ЗНАЧЕННЯ — label + 80px gold underline + body, matching /card/[slug] */}
-          <section className="flex flex-col gap-4">
-            <div>
-              <span className="text-label block mb-2">ЗНАЧЕННЯ</span>
-              <div className="h-px w-[80px]" style={{ backgroundColor: "rgba(200,168,97,0.55)" }} />
+          {/* Content — card on the left, sections on the right.
+              The card name is intentionally NOT repeated as a heading: it's
+              already painted on the card illustration itself. */}
+          <div className="flex flex-col md:flex-row gap-5 md:gap-10 lg:gap-14">
+            {/* ── Left: card image, displayed cleanly on dark (no cream panel) ── */}
+            <div className="shrink-0 self-center md:self-start">
+              <div
+                className="relative"
+                style={{
+                  width: "min(290px, 70vw)",
+                  aspectRatio: "374 / 594",
+                  borderRadius: 16,
+                  overflow: "hidden",
+                  border: "1px solid rgba(200,168,97,0.45)",
+                  boxShadow: "0 0 32px rgba(0,0,0,0.55)",
+                }}
+              >
+                <Image
+                  src={card.image}
+                  alt={card.name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 767px) 70vw, 290px"
+                  priority
+                />
+              </div>
             </div>
-            <p className="text-body" style={{ color: "#e5ddc8", maxWidth: 540, margin: 0 }}>
-              {card.meaning}
-            </p>
-          </section>
 
-          {/* ПОРАДА — same pattern */}
-          <section className="flex flex-col gap-4">
-            <div>
-              <span className="text-label block mb-2">ПОРАДА</span>
-              <div className="h-px w-[80px]" style={{ backgroundColor: "rgba(200,168,97,0.55)" }} />
+            {/* ── Right: ЗНАЧЕННЯ + ПОРАДА ── */}
+            <div className="flex-1 min-w-0 flex flex-col gap-7 md:gap-9">
+              {/* ЗНАЧЕННЯ — label + 80px gold underline + body, matching /card/[slug] */}
+              <section className="flex flex-col gap-4">
+                <div>
+                  <span className="text-label block mb-2">ЗНАЧЕННЯ</span>
+                  <div className="h-px w-[80px]" style={{ backgroundColor: "rgba(200,168,97,0.55)" }} />
+                </div>
+                <p className="text-body" style={{ color: "#e5ddc8", maxWidth: 540, margin: 0 }}>
+                  {card.meaning}
+                </p>
+              </section>
+
+              {/* ПОРАДА — same pattern */}
+              <section className="flex flex-col gap-4">
+                <div>
+                  <span className="text-label block mb-2">ПОРАДА</span>
+                  <div className="h-px w-[80px]" style={{ backgroundColor: "rgba(200,168,97,0.55)" }} />
+                </div>
+                <p className="text-body" style={{ color: "#e5ddc8", maxWidth: 540, margin: 0 }}>
+                  {card.advice}
+                </p>
+              </section>
             </div>
-            <p className="text-body" style={{ color: "#e5ddc8", maxWidth: 540, margin: 0 }}>
-              {card.advice}
-            </p>
-          </section>
-        </div>
+          </div>
         </div>
       </div>
     </div>,

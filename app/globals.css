@@ -114,7 +114,7 @@
     --text-hero:         48px;
     --text-label:        18px;
     --text-body:         16px;
-    --text-subtitle:     16px;
+    --text-subtitle:     17px;
   }
 }
 
@@ -364,6 +364,34 @@
 
 .card-back-face {
   transform: rotateY(180deg);
+}
+
+/* ─── Landing astral chart wrapper ──────────────────────
+   Default desktop inset matches the inner gold frame. On phones the chart is
+   pulled in further so it stops competing with the (much larger relative) hero
+   text — and its lower opacity keeps it as ambient backdrop, not foreground. */
+.astral-chart-wrap {
+  inset: 50px;
+}
+@media (max-width: 767px) {
+  .astral-chart-wrap {
+    inset: clamp(80px, 22vw, 140px);
+    opacity: 0.55;
+  }
+}
+
+/* ─── Deck slot height ──────────────────────────────────
+   Desktop / tablet: max of card-height and the 329px spread-card height — keeps
+   the slot constant between idle (deck stack) and spread states.
+   Phone: tall enough for the 2×2 grid (2 cards + vertical gap), so the title
+   and CTA below don't get pushed off-screen when the spread mounts. */
+.deck-slot {
+  height: max(var(--card-height), 329px);
+}
+@media (max-width: 767px) {
+  .deck-slot {
+    height: calc(2 * var(--card-height) + 20px);
+  }
 }
 
 /* ─── Deck shuffle animation ────────────────────────── */
@@ -715,18 +743,20 @@
   }
 }
 
-/* ─── Card deal animation v7 — natural fan-out, no opacity, no jerks
-   Cards mount fully opaque, stacked at the deck centre, then glide outward to
-   their flex slots. Pure horizontal translate — no opacity flicker, no scale,
-   smooth ease-out-cubic so the cards decelerate naturally without snapping. */
+/* ─── Card deal animation v8 — natural fan-out with soft fade-in
+   Cards mount stacked at the deck centre and glide outward to their flex slots.
+   A short opacity ramp at the start covers the hand-off from the 3-card deck
+   stack (which unmounts when shuffle ends) to the 5-card spread — without it,
+   five cards pop in fully opaque on the same frame, which reads as a jump. */
 @keyframes dealFromCenter {
-  from { transform: translate(var(--deal-x, 0), 0); }
-  to   { transform: translate(0, 0); }
+  0%   { transform: translate(var(--deal-x, 0), 0); opacity: 0; }
+  35%  { opacity: 1; }
+  100% { transform: translate(0, 0); opacity: 1; }
 }
 
 .dealCard {
   animation: dealFromCenter 0.75s cubic-bezier(0.33, 1, 0.68, 1) both;
-  will-change: transform;
+  will-change: transform, opacity;
 }
 
 /* Each successive card lands on top of the previous */
@@ -743,9 +773,27 @@
   }
 }
 
-/* ─── Mobile card spread: horizontal scroll snap ────── */
+/* ─── Phone 2×2 grid entrance ───────────────────────────
+   Soft scale + fade for grid layout, where center-out fan doesn't apply. */
+@keyframes dealDropIn {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.dealCardGrid {
+  animation: dealDropIn 0.5s cubic-bezier(0.33, 1, 0.68, 1) both;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dealCardGrid { animation: none; opacity: 1; }
+}
+
+/* ─── Tablet card spread: horizontal scroll snap ───────
+   `display` is intentionally controlled by Tailwind's responsive utilities on
+   the element (`hidden md:flex xl:hidden`) so the phone breakpoint can hide it
+   completely; we just configure scroll behaviour and gap here. */
 .card-spread-mobile {
-  display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;

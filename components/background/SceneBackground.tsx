@@ -329,8 +329,10 @@ function AstralChart() {
         cy: -radius * Math.sin(angle),
       };
     });
-  const outerDots = makeRingDots(540);
-  const innerDots = makeRingDots(496.8);
+  // Rings scaled +15% from Figma baseline (540 → 621, 496.8 → 571.32) for a
+  // more present chart on the landing hero.
+  const outerDots = makeRingDots(621);
+  const innerDots = makeRingDots(571.32);
   // Hexagram triangles — Figma vertices translated so chart centre sits at (0,0)
   // Figma cx=864, cy=588.5 → subtract from each vertex.
   const tri1 = "0,-390.1 386.38,278.64 -386.38,278.64";
@@ -338,8 +340,7 @@ function AstralChart() {
   return (
     <div
       aria-hidden="true"
-      className="absolute pointer-events-none flex items-center justify-center"
-      style={{ inset: 50 }}
+      className="absolute pointer-events-none flex items-center justify-center astral-chart-wrap"
     >
       <svg
         className="block w-full h-full"
@@ -349,7 +350,7 @@ function AstralChart() {
         {/* Outer ring — r=540 — and 12 dots evenly spaced on its circumference
             (every 30°). Grouped together so they rotate as one rigid unit, CW. */}
         <g className="astral-ring-outer">
-          <circle cx={0} cy={0} r={540} fill="none" stroke={s} strokeOpacity={0.4} strokeWidth={1} />
+          <circle cx={0} cy={0} r={621} fill="none" stroke={s} strokeOpacity={0.4} strokeWidth={1} />
           {outerDots.map((d, i) => (
             <circle key={i} cx={d.cx} cy={d.cy} r={DOT_R} fill={s} />
           ))}
@@ -357,7 +358,7 @@ function AstralChart() {
 
         {/* Inner ring — r=496.8 — same 12-dot pattern, rotates CCW. */}
         <g className="astral-ring-inner">
-          <circle cx={0} cy={0} r={496.8} fill="none" stroke={s} strokeOpacity={0.4} strokeWidth={1} />
+          <circle cx={0} cy={0} r={571.32} fill="none" stroke={s} strokeOpacity={0.4} strokeWidth={1} />
           {innerDots.map((d, i) => (
             <circle key={i} cx={d.cx} cy={d.cy} r={DOT_R} fill={s} />
           ))}

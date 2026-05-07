@@ -25,6 +25,12 @@ function getDealStyle(i: number, total: number): React.CSSProperties {
 }
 
 export default function CardSpread({ cardSlugs, onPick }: CardSpreadProps) {
+  // Phones get a 2×2 grid of 4 cards (a horizontal row of 5 doesn't fit and
+  // scroll-snap on a "pick one" screen is awkward — there's no visual hint that
+  // more cards exist offscreen). The 5th peeked slug just stays in the deck;
+  // peekNextCards doesn't consume, drawCard does.
+  const phoneSlugs = cardSlugs.slice(0, 4);
+
   return (
     <>
       {/* Desktop (≥ xl, 1280px) — flex row, all 5 cards visible at once.
@@ -41,10 +47,10 @@ export default function CardSpread({ cardSlugs, onPick }: CardSpreadProps) {
         ))}
       </div>
 
-      {/* Phone & tablet (< xl) — horizontal scroll-snap. Five 208-px cards don't
-          fit side-by-side until ~1280px viewport, so we fall back to a swipeable
-          row. Cards still emerge with the same fan-out animation. */}
-      <div className="xl:hidden card-spread-mobile py-4">
+      {/* Tablet (md..lg, 768–1279) — horizontal scroll-snap, all 5 cards
+          swipeable. Tablet has the room for the spread metaphor; switching it
+          to a grid would feel cramped given the larger card size. */}
+      <div className="hidden md:flex xl:hidden card-spread-mobile py-4">
         {cardSlugs.map((slug, i) => (
           <div
             key={slug}
@@ -52,6 +58,28 @@ export default function CardSpread({ cardSlugs, onPick }: CardSpreadProps) {
             style={getDealStyle(i, cardSlugs.length)}
           >
             <CardBack size="spread" onClick={() => onPick(slug)} />
+          </div>
+        ))}
+      </div>
+
+      {/* Phone (< md) — 2×2 grid of 4 cards, sized to --card-width / --card-height.
+          A center-out fan animation doesn't apply here (cards live in a grid,
+          not a row), so each card drops in with a soft scale+fade. */}
+      <div
+        className="md:hidden grid grid-cols-2 gap-x-4 gap-y-5 mx-auto shrink-0"
+        style={{ width: "calc(2 * var(--card-width) + 16px)", maxWidth: "100%" }}
+      >
+        {phoneSlugs.map((slug, i) => (
+          <div
+            key={slug}
+            className="dealCardGrid"
+            style={{
+              width: "var(--card-width)",
+              height: "var(--card-height)",
+              animationDelay: `${i * 70}ms`,
+            }}
+          >
+            <CardBack size="fill" onClick={() => onPick(slug)} />
           </div>
         ))}
       </div>
