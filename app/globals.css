@@ -1,0 +1,895 @@
+/* ─── Google Fonts ──────────────────────────────────── */
+/* Cormorant Garamond: display, logo, labels, buttons   */
+/* Open Sans: body text (meaning, advice, subtitle)     */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Open+Sans:wght@300;400;600&family=PT+Serif:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens (sourced from Figma) ────────────── */
+:root {
+  /* ── Colors ─────────────────────────── */
+
+  /* Page background — pure black (#000000) */
+  --color-bg: #000000;
+
+  /* Dark surface for containers/cards (slightly warm black) */
+  --color-surface: #0a0507;
+
+  /* Divider / separator line — gold 35% */
+  --color-border: rgba(200, 168, 97, 0.35);
+
+  /* Outer frame border — gold 45% */
+  --color-border-outer: rgba(200, 168, 97, 0.45);
+
+  /* Inner frame border — gold 20% */
+  --color-border-inner: rgba(200, 168, 97, 0.20);
+
+  /* Atmosphere glow — warm gold radial, used as background aura */
+  --color-glow: rgba(200, 168, 97, 0.12);
+
+  /* Primary text — warm cream (#f4eccb), used for subtitle on landing */
+  --color-text-primary: #f4eccb;
+
+  /* Secondary text — muted cream (#e5ddc8), used for meaning/advice body */
+  --color-text-secondary: #e5ddc8;
+
+  /* Muted / placeholder */
+  --color-text-muted: rgba(200, 168, 97, 0.50);
+
+  /* Primary gold accent (#c8a861) — logo, nav, labels, stars, borders */
+  --color-accent-gold: #c8a861;
+
+  /* Lighter gold (#e0b96a) — constellation stars, ornaments */
+  --color-accent-star: #e0b96a;
+
+  /* Button border highlight (#e8c882 at 85%) */
+  --color-btn-border: rgba(232, 200, 130, 0.85);
+
+  /* Text on gold button (dark maroon) */
+  --color-btn-text: #1f0d1a;
+
+  /* ── Typography ─────────────────────── */
+
+  /* Display: Cormorant Garamond — all headings, labels, CTAs */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+
+  /* Body: Open Sans — meaning text, advice, descriptions */
+  --font-body: 'Open Sans', system-ui, sans-serif;
+
+  /* Mono: fallback */
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* ── Font sizes (Figma values) ────── */
+  --text-logo:        13px;   /* logo wordmark, nav links */
+  --text-label:       22px;   /* ЗНАЧЕННЯ / ПОРАДА section labels */
+  --text-body:        20px;   /* meaning / advice paragraphs */
+  --text-subtitle:    22px;   /* landing subtitle */
+  --text-btn:         18px;   /* button text */
+  --text-hero:        128px;  /* hero title on landing (scales down) */
+
+  /* ── Letter spacing (Figma % → em) ─ */
+  --ls-logo:    0.40em;   /* 40% — logo, nav */
+  --ls-label:   0.50em;   /* 50% — ЗНАЧЕННЯ, ПОРАДА */
+  --ls-btn:     0.36em;   /* 36% — button CTA */
+  --ls-hero:    0.01em;   /* 1%  — hero title */
+
+  /* ── Line height ──────────────────── */
+  --lh-body: 1.55;   /* 155% — meaning / advice paragraphs */
+
+  /* ── Card dimensions — desktop ────── */
+  /* Figma: 219×347px (spread cards: 208×329px, same ratio) */
+  --card-width:  219px;
+  --card-height: 347px;
+
+  /* ── Layout ──────────────────────── */
+  --header-height:   64px;
+  --page-padding-x:  120px;
+  --content-max-w:   1440px;
+}
+
+/* ─── Tablet overrides (iPad portrait 768–1023px) ──── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --card-width:        175px;
+    --card-height:       277px;
+    --page-padding-x:    48px;
+    --text-hero:         72px;
+  }
+}
+
+/* ─── Mobile overrides (< 768px) ───────────────────── */
+@media (max-width: 767px) {
+  :root {
+    --card-width:        140px;
+    --card-height:       222px;
+    --page-padding-x:    20px;
+    --header-height:     52px;
+    --text-hero:         48px;
+    --text-label:        18px;
+    --text-body:         16px;
+    --text-subtitle:     16px;
+  }
+}
+
+/* ─── Base reset ────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--lh-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Remove default focus ring — replaced by gold outline */
+  :focus-visible {
+    outline: 1px solid var(--color-accent-gold);
+    outline-offset: 2px;
+  }
+}
+
+/* ─── Typography utilities ──────────────────────────── */
+@layer components {
+  /* Logo wordmark — "THE DESIGNER'S ARCANA" */
+  .text-logo {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-logo);
+    letter-spacing: var(--ls-logo);
+    color: var(--color-accent-gold);
+    text-transform: uppercase;
+  }
+
+  /* Section label — ЗНАЧЕННЯ / ПОРАДА */
+  .text-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-label);
+    letter-spacing: var(--ls-label);
+    color: var(--color-accent-gold);
+    text-transform: uppercase;
+  }
+
+  /* Hero display title — "The Designer's Arcana" */
+  .text-hero {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-hero);
+    letter-spacing: var(--ls-hero);
+    color: var(--color-accent-gold);
+    line-height: 1.0;
+  }
+
+  /* Body paragraph — meaning / advice */
+  .text-body {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: var(--text-body);
+    line-height: var(--lh-body);
+    color: var(--color-text-secondary);
+  }
+
+  /* Subtitle — landing page description */
+  .text-subtitle {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: var(--text-subtitle);
+    color: var(--color-text-primary);
+  }
+
+  /* Navigation link — НАЗАД / ІСТОРІЯ */
+  .text-nav {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-logo);
+    letter-spacing: var(--ls-logo);
+    color: var(--color-accent-gold);
+    text-transform: uppercase;
+  }
+
+  /* Button label — ПОЧАТИ СЕСІЮ / ВИТЯГНУТИ ЩЕ */
+  .text-btn {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-btn);
+    letter-spacing: var(--ls-btn);
+    color: var(--color-btn-text);
+    text-transform: uppercase;
+  }
+
+  /* ── Atmosphere glow — disabled, design uses flat black background */
+  .atmosphere-glow {
+    display: none;
+  }
+
+  /* ── Outer decorative frame (two nested rectangles) — Figma exact insets */
+  .frame-border {
+    position: absolute;
+    inset: 40px;
+    border: 1px solid var(--color-border-outer);
+    pointer-events: none;
+  }
+
+  .frame-border-inner {
+    position: absolute;
+    inset: 50px;
+    border: 1px solid var(--color-border-inner);
+    pointer-events: none;
+  }
+
+  /* ── Primary CTA button — gold pill (Figma: r=999) */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background-color: var(--color-accent-gold);
+    border: 1px solid var(--color-btn-border);
+    border-radius: 999px;
+    color: var(--color-btn-text);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-btn);
+    letter-spacing: var(--ls-btn);
+    text-transform: uppercase;
+    padding: 0 32px;
+    height: 58px;
+    cursor: pointer;
+    transition:
+      transform 0.25s cubic-bezier(0.33, 1, 0.68, 1),
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.3s ease,
+      letter-spacing 0.25s ease;
+    white-space: nowrap;
+    width: 100%;
+    box-shadow: 0 0 0 rgba(232, 200, 130, 0);
+  }
+
+  @media (min-width: 768px) {
+    .btn-primary {
+      width: auto;
+      min-width: 315px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .btn-primary {
+      min-width: 386px;
+    }
+  }
+
+  .btn-primary:hover {
+    background-color: #dbbb6e;          /* lighter gold */
+    border-color: rgba(255, 232, 170, 1);
+    box-shadow:
+      0 0 20px rgba(232, 200, 130, 0.32),
+      0 0 8px  rgba(255, 220, 140, 0.22);
+    transform: translateY(-2px) scale(1.02);
+    letter-spacing: calc(var(--ls-btn) + 0.02em);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0) scale(0.985);
+    box-shadow: 0 0 11px rgba(200, 168, 97, 0.25);
+    transition-duration: 0.1s;
+  }
+
+  /* ── Nav link (НАЗАД / ІСТОРІЯ) — gold → star colour with sweeping underline */
+  .nav-link {
+    position: relative;
+    display: inline-block;
+    color: var(--color-accent-gold);
+    transition:
+      color 0.25s ease,
+      transform 0.25s cubic-bezier(0.33, 1, 0.68, 1),
+      text-shadow 0.25s ease;
+    padding-bottom: 4px;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--color-accent-star);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  .nav-link:hover {
+    color: var(--color-accent-star);
+    text-shadow: 0 0 12px rgba(224, 185, 106, 0.45);
+    transform: translateY(-1px);
+  }
+  .nav-link:hover::after {
+    transform: scaleX(1);
+  }
+  .nav-link:active {
+    transform: translateY(0);
+    transition-duration: 0.1s;
+  }
+
+  /* ── Page wrapper — max-width + padding */
+  .page-content {
+    position: relative;
+    width: 100%;
+    max-width: var(--content-max-w);
+    margin-inline: auto;
+    padding-inline: var(--page-padding-x);
+  }
+}
+
+/* ─── 3D card flip ──────────────────────────────────── */
+.perspective {
+  perspective: 1200px;
+}
+
+.card-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face,
+.card-back-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  position: absolute;
+  inset: 0;
+}
+
+.card-back-face {
+  transform: rotateY(180deg);
+}
+
+/* ─── Deck shuffle animation ────────────────────────── */
+.deck {
+  position: relative;
+  width: var(--card-width);
+  height: var(--card-height);
+  transform-origin: center center;
+}
+
+.deckCard {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transform-origin: bottom center;
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.35s ease-out;
+}
+
+/* Idle: only middle card visible (scoped so shuffle can override without specificity fight) */
+.deck:not(.deckShuffling) .deckCard[data-layer="0"] { opacity: 0; z-index: 1; }
+.deck:not(.deckShuffling) .deckCard[data-layer="1"] { opacity: 1; z-index: 3; }
+.deck:not(.deckShuffling) .deckCard[data-layer="2"] { opacity: 0; z-index: 2; }
+
+.deckShuffling {
+  animation: shuffleWiggle 1.5s ease-in-out 1 both;
+}
+
+.deckShuffling .deckCard {
+  opacity: 1;
+  animation: shuffleFan 1.5s ease-in-out 1 both;
+  pointer-events: none;
+}
+
+.deckShuffling .deckCard[data-layer="0"] { --fan-x: -40px; --fan-r: -8deg; z-index: 1; }
+.deckShuffling .deckCard[data-layer="1"] { --fan-x:   0px; --fan-r:  0deg; z-index: 3; }
+.deckShuffling .deckCard[data-layer="2"] { --fan-x:  40px; --fan-r:  8deg; z-index: 2; }
+
+@keyframes shuffleWiggle {
+  0%   { transform: rotate(0deg); }
+  20%  { transform: rotate(10deg); }
+  40%  { transform: rotate(-10deg); }
+  60%  { transform: rotate(5deg); }
+  80%  { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes shuffleFan {
+  0%   { transform: translateX(0)              rotate(0deg); }
+  50%  { transform: translateX(var(--fan-x, 0)) rotate(var(--fan-r, 0deg)); }
+  100% { transform: translateX(0)              rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deckShuffling,
+  .deckShuffling .deckCard { animation: none; }
+}
+
+/* ─── Constellation ambient motion — subtle, elegant cosmic feel ─ */
+
+/* Stars: gentle opacity twinkle, no scale (keeps the dots crisp) */
+@keyframes constellationTwinkle {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
+/* Lines: faint breath, narrow opacity range so they never disappear */
+@keyframes constellationLineBreath {
+  0%, 100% { opacity: 0.65; }
+  50%      { opacity: 1; }
+}
+
+/* Astral geometry: imperceptibly slow rotation around the SVG viewBox center */
+@keyframes astralRotateCW {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes astralRotateCCW {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+/* Apply to <circle> elements */
+.constellationStar {
+  animation: constellationTwinkle 5s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Apply to <line> elements */
+.constellationLine {
+  animation: constellationLineBreath 7s ease-in-out infinite;
+}
+
+/* Apply to <g> wrappers around AstralChart / DetailAstralCircles */
+.astralRotate {
+  animation: astralRotateCW 240s linear infinite;
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
+.astralRotateReverse {
+  animation: astralRotateCCW 320s linear infinite;
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
+
+/* ─── Sparkle navbar host — bridge SparkleNavbar's buttons into our nav
+   typography (Cormorant Garamond medium, uppercase, gold, tracked) so the
+   imported component looks native. The rest of the SparkleNavbar's internal
+   styles (sparkle SVG, active indicator, hover glow) come from its own
+   <style> tag and are left untouched. */
+.sparkle-navbar-host .navigation-menu {
+  margin: 0;
+}
+.sparkle-navbar-host .navigation-menu ul {
+  gap: 28px;
+}
+.sparkle-navbar-host .navigation-menu ul li button {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-logo);
+  letter-spacing: var(--ls-logo);
+  color: var(--color-accent-gold);
+  text-transform: uppercase;
+  line-height: 1;
+}
+.sparkle-navbar-host .navigation-menu ul li.active button {
+  color: var(--color-accent-gold-bright, #ffe89a);
+}
+/* Pull the active sparkle line closer to the buttons. The original snippet
+   used 34px assuming taller text; our text-nav line height is ~16px so 22px
+   keeps the indicator visually attached to the menu. Higher specificity
+   (3 classes vs 2) wins over the SparkleNavbar's inlined style block. */
+.sparkle-navbar-host .navigation-menu .active-element {
+  top: 22px;
+}
+
+/* Landing astral chart concentric rings — independent perpetual rotation.
+   Outer ring spins clockwise (~50s/rev), inner ring counter-clockwise
+   (~35s/rev). Strictly linear, infinite, no easing or delay.
+   The SVG viewBox is "-630 -630 1260 1260" → its geometric centre lives at
+   user-space coord (0, 0). Absolute-pixel transform-origin values target
+   user-space directly (no transform-box needed) so the rings pivot exactly
+   on their shared centre in every browser, even when the viewBox origin
+   is negative. */
+.astral-ring-outer {
+  animation: astralRotateCW 50s linear infinite;
+  transform-origin: 0px 0px;
+}
+.astral-ring-inner {
+  animation: astralRotateCCW 35s linear infinite;
+  transform-origin: 0px 0px;
+}
+
+/* Sparkle: 4-point star that pulses size + opacity, longer cycle so they read as accents */
+@keyframes sparkleTwinkle {
+  0%, 100% { opacity: 0;   transform: scale(0.6) rotate(0deg); }
+  45%      { opacity: 0.9; transform: scale(1.1) rotate(45deg); }
+  55%      { opacity: 0.9; transform: scale(1.1) rotate(45deg); }
+}
+.sparkle {
+  animation: sparkleTwinkle 6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Central astral chart: very subtle breathing glow to draw the eye */
+@keyframes astralPulse {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1;    }
+}
+.astralPulse {
+  animation: astralPulse 8s ease-in-out infinite;
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
+
+/* Corner clusters: gentle floating drift so the static dots don't feel pinned */
+@keyframes cornerDrift {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(0, -4px); }
+}
+.cornerDrift {
+  animation: cornerDrift 11s ease-in-out infinite;
+  transform-box: view-box;
+}
+
+/* Animate.css-style entrance: zoomIn — element scales up from 20% with a fade.
+   Used on the landing hero title. Plays once on mount. */
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    transform: scale3d(0.2, 0.2, 0.2);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+.animate__zoomIn {
+  animation: zoomIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate__zoomIn { animation: none; opacity: 1; }
+}
+
+/* SparklesText: per-sparkle birth → spin → death lifecycle.
+   --sparkle-rotation-start randomises the starting angle so they don't all
+   spin in phase. The keyframes scale 0 → 1 → 0 with opacity for smooth in/out. */
+@keyframes sparkleLife {
+  0% {
+    transform: scale(0) rotate(var(--sparkle-rotation-start, 0deg));
+    opacity: 0;
+  }
+  20% {
+    transform: scale(1) rotate(calc(var(--sparkle-rotation-start, 0deg) + 30deg));
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1) rotate(calc(var(--sparkle-rotation-start, 0deg) + 180deg));
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0) rotate(calc(var(--sparkle-rotation-start, 0deg) + 270deg));
+    opacity: 0;
+  }
+}
+.sparkle-dot {
+  display: block;
+  animation-name: sparkleLife;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  transform-origin: center;
+  transform-box: fill-box;
+  will-change: transform, opacity;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sparkle-dot { animation: none; opacity: 0; }
+}
+
+/* Card popup entrance — gentle two-stage:
+   1) backdrop fades in (250ms)
+   2) modal slides up & scales from 96% with a soft ease-out (380ms)
+   Both honour prefers-reduced-motion. */
+@keyframes popupBackdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes popupModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.popup-backdrop {
+  animation: popupBackdropIn 250ms ease-out both;
+}
+.popup-modal {
+  animation: popupModalIn 380ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+@media (prefers-reduced-motion: reduce) {
+  .popup-backdrop, .popup-modal { animation: none; }
+}
+
+/* Magic.css-style entrance: vanishOut — element scales up 2× while fading out
+   and blurring. Used as the "open" feedback when a History row is clicked. */
+@keyframes vanishOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+    filter: blur(20px);
+  }
+}
+.animate__vanishOut {
+  animation: vanishOut 0.6s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  transform-origin: center center;
+  will-change: transform, opacity, filter;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate__vanishOut { animation: none; opacity: 0; }
+}
+
+/* Comets: flash effect — sharp pop in with a slight scale punch, brief hold,
+   slower decay to dark, then a long pause before the next flash. Each comet is
+   offset by --comet-delay so the three never flash together. */
+@keyframes cometFlash {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  3% {
+    opacity: 1;
+    transform: scale(1.12);   /* tiny over-shoot for punch */
+  }
+  10% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  35% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+.comet {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cometFlash 8s ease-out infinite;
+  animation-delay: var(--comet-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .constellationStar,
+  .constellationLine,
+  .astralRotate,
+  .astralRotateReverse,
+  .astral-ring-outer,
+  .astral-ring-inner,
+  .sparkle,
+  .astralPulse,
+  .cornerDrift,
+  .comet {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ─── Card deal animation v7 — natural fan-out, no opacity, no jerks
+   Cards mount fully opaque, stacked at the deck centre, then glide outward to
+   their flex slots. Pure horizontal translate — no opacity flicker, no scale,
+   smooth ease-out-cubic so the cards decelerate naturally without snapping. */
+@keyframes dealFromCenter {
+  from { transform: translate(var(--deal-x, 0), 0); }
+  to   { transform: translate(0, 0); }
+}
+
+.dealCard {
+  animation: dealFromCenter 0.75s cubic-bezier(0.33, 1, 0.68, 1) both;
+  will-change: transform;
+}
+
+/* Each successive card lands on top of the previous */
+.dealCard:nth-child(1) { z-index: 1; }
+.dealCard:nth-child(2) { z-index: 2; }
+.dealCard:nth-child(3) { z-index: 3; }
+.dealCard:nth-child(4) { z-index: 4; }
+.dealCard:nth-child(5) { z-index: 5; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dealCard {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ─── Mobile card spread: horizontal scroll snap ────── */
+.card-spread-mobile {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 12px;
+  padding-inline: calc(50% - var(--card-width) / 2);
+}
+
+.card-spread-mobile::-webkit-scrollbar {
+  display: none;
+}
+
+.card-spread-mobile > * {
+  scroll-snap-align: center;
+  flex-shrink: 0;
+}
+
+/* ─── History page: internal list scroller ────── */
+/* Body scroll is locked on /history (app-shell). Only this container moves.
+   iOS momentum scroll + a thin gold scrollbar that fits the cosmic theme.
+   Bottom mask: items fade smoothly into the page rim instead of getting
+   hard-clipped at the scroller's bottom edge. */
+.history-scroller {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200, 168, 97, 0.32) transparent;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0,
+    black calc(100% - 48px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black 0,
+    black calc(100% - 48px),
+    transparent 100%
+  );
+}
+.history-scroller::-webkit-scrollbar {
+  width: 6px;
+}
+.history-scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+.history-scroller::-webkit-scrollbar-thumb {
+  background-color: rgba(200, 168, 97, 0.28);
+  border-radius: 3px;
+}
+.history-scroller::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(200, 168, 97, 0.5);
+}
+
+/* ─── Landing shooting stars (зорепад) ────────────────────────────────────────
+   Very lightweight effect: 3 streaks fall diagonally across the upper portion
+   of the screen at long, asynchronous intervals (~22–38s each). Only visible
+   on the landing variant. Each .shooting-star is a 0×0 anchor rotated to its
+   trajectory; ::before paints the streak (a horizontal gradient with a soft
+   glow) and animates it along the rotated X-axis. Triple-translate keeps the
+   streak hidden almost the entire loop and only flashes briefly. */
+.shooting-star {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  /* Rotation set per-instance via inline style. transform here would clash. */
+}
+.shooting-star::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -0.75px;
+  width: 96px;
+  height: 1.5px;
+  background: linear-gradient(
+    to left,
+    rgba(255, 248, 220, 0.95) 0%,
+    rgba(255, 232, 154, 0.55) 30%,
+    rgba(255, 232, 154, 0)    100%
+  );
+  border-radius: 100%;
+  filter: drop-shadow(0 0 3px rgba(255, 232, 154, 0.45));
+  animation: shootingStar var(--ss-duration, 26s) linear infinite;
+  animation-delay: var(--ss-delay, 0s);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+@keyframes shootingStar {
+  /* hidden ~94% of the loop; one quick flash then long quiet */
+  0%   { opacity: 0; transform: translateX(0)      scaleX(0.4); }
+  3%   { opacity: 0; transform: translateX(0)      scaleX(0.5); }
+  4%   { opacity: 1; transform: translateX(-30px)  scaleX(0.9); }
+  7%   { opacity: 0.8; transform: translateX(-220px) scaleX(1); }
+  9%   { opacity: 0; transform: translateX(-380px) scaleX(0.6); }
+  100% { opacity: 0; transform: translateX(-380px) scaleX(0.6); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shooting-star::before { animation: none; opacity: 0; }
+}
+
+/* ─── Landing flying comets ───────────────────────────────────────────────
+   Two long warm-gold streaks fly diagonally across the viewport, entering
+   from off-screen upper-right and exiting off-screen lower-left. The
+   wrapper rotation is set inline per-comet; this CSS handles the streak
+   gradient/glow and the long translateX animation that carries it across
+   the screen. translateX is POSITIVE so motion runs along +X of the
+   rotated wrapper (which lands in the lower-left direction in screen
+   space for the chosen angles).
+   The streak is hidden ~80% of the cycle and quickly flies across once. */
+.flying-comet {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.flying-comet::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -1px;
+  width: 200px;
+  height: 2px;
+  background: linear-gradient(
+    to left,
+    rgba(255, 250, 224, 1) 0%,
+    rgba(255, 232, 154, 0.7) 22%,
+    rgba(255, 232, 154, 0) 100%
+  );
+  border-radius: 100%;
+  filter: drop-shadow(0 0 5px rgba(255, 232, 154, 0.5));
+  opacity: 0;
+  animation: flyingCometCross var(--fc-duration, 14s) linear infinite;
+  animation-delay: var(--fc-delay, 0s);
+  will-change: transform, opacity;
+}
+
+@keyframes flyingCometCross {
+  /* Hidden ~80% of loop; one full cross then long quiet. */
+  0%, 4%   { opacity: 0;   transform: translateX(0); }
+  6%       { opacity: 1;   transform: translateX(200px); }
+  18%      { opacity: 1;   transform: translateX(1300px); }
+  22%      { opacity: 0;   transform: translateX(2200px); }
+  100%     { opacity: 0;   transform: translateX(2200px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flying-comet::before { animation: none; opacity: 0; }
+}
+
