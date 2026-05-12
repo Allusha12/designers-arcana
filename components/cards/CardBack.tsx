@@ -35,6 +35,9 @@ export default function CardBack({ className, onClick, size = "idle" }: CardBack
         sizes={`${w}px`}
         className="object-cover"
         priority
+        // back.avif is 235 KB — serving it directly from the edge (~150ms)
+        // beats waiting for Vercel to generate per-device-size variants.
+        unoptimized
       />
       {/* Gold glow border on hover */}
       <div

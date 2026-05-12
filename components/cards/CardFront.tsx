@@ -47,15 +47,18 @@ export default function CardFront({ card, className, size = "flip" }: CardFrontP
         // after hydration. The flip variant is decorative on /deck and stays
         // lazy-loaded.
         priority={isDetail}
-        // Without a placeholder, phones see an empty black rectangle for 1–2s
-        // on cold CDN cache (Vercel optimises the 3.5MB source PNG on first
-        // hit for each device size). The gradient blur cross-fades to the
-        // real image, so the page feels instant.
+        // Without a placeholder, phones see an empty black rectangle while
+        // the file streams. The gradient blur cross-fades into the painted
+        // illustration so the page never feels "broken".
         placeholder="blur"
         blurDataURL={BLUR_PLACEHOLDER}
-        // Default quality (75). The source is already an AVIF q88 (preprocessed
-        // by scripts/optimize-cards.mjs), so the heavy lifting is done — extra
-        // compression at delivery time risks double-encoding artifacts.
+        // Skip Vercel's image optimization pipeline. The source AVIFs are
+        // already 350–800 KB (pre-compressed q88 1500×2384), so the only thing
+        // Vercel adds is a cold-cache penalty: regenerating each device-size
+        // variant on first hit took ~1.3s, vs. 150–450ms to serve the AVIF
+        // directly from the edge. The bytes saved by extra resizing aren't
+        // worth the latency for content this small.
+        unoptimized
       />
       <div
         className="absolute inset-0 pointer-events-none"
