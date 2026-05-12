@@ -1,4 +1,6 @@
+"use client";
 import Image from "next/image";
+import { useState } from "react";
 import { clsx } from "clsx";
 import type { Card } from "@/types";
 
@@ -23,6 +25,11 @@ const BLUR_PLACEHOLDER =
 export default function CardFront({ card, className, size = "flip" }: CardFrontProps) {
   const isDetail = size === "detail";
   const r = 16;
+
+  // Track when the source AVIF finishes streaming so we can fade the shimmer
+  // overlay out instead of cutting it abruptly. Only matters for the detail
+  // size — the flip variant is hidden until the card-back rotates over.
+  const [loaded, setLoaded] = useState(false);
 
   // For "detail" size we fill the parent so the parent can apply responsive
   // sizing (clamp / max-width / vw) without us hard-coding pixels.
@@ -59,7 +66,20 @@ export default function CardFront({ card, className, size = "flip" }: CardFrontP
         // directly from the edge. The bytes saved by extra resizing aren't
         // worth the latency for content this small.
         unoptimized
+        onLoadingComplete={() => setLoaded(true)}
       />
+      {/* Gold shimmer that sweeps diagonally across the placeholder while the
+          AVIF streams in, then fades out as soon as the image fires its load
+          event. Sits above the (blurred) image so it's visible during load
+          and disappears the moment the real card appears. Decorative — hidden
+          from assistive tech and disabled under prefers-reduced-motion. */}
+      {isDetail && (
+        <div
+          aria-hidden="true"
+          className={clsx("card-shimmer", loaded && "card-shimmer--hidden")}
+          style={{ borderRadius: r }}
+        />
+      )}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ borderRadius: r, border: "1px solid rgba(200,168,97,0.45)" }}
