@@ -423,55 +423,6 @@ html {
   transform: rotateY(180deg);
 }
 
-/* ─── Card image loading shimmer ────────────────────────
-   A warm-gold gradient sweeps diagonally across the card while the AVIF
-   streams from the edge. We layer it ABOVE the (blurred) <img> so it's the
-   thing the user sees during the 200–500ms load window; the moment
-   onLoadingComplete fires we add `.card-shimmer--hidden`, which cross-fades
-   it out over 450ms while the painted card takes over. */
-.card-shimmer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 2;
-  overflow: hidden;
-  /* Subtle dark fill so the placeholder reads as a solid card-shaped area
-     even before the blur kicks in (some browsers paint the <img>
-     background slightly later than this sibling div). */
-  background-color: rgba(26, 22, 18, 0.55);
-  transition: opacity 0.45s ease-out;
-}
-/* The actual moving highlight — gold band drawn with a wide gradient that
-   slides across the 250%-wide background. Two-stop falloff so the edges
-   blend smoothly into the dark fill. */
-.card-shimmer::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(
-    105deg,
-    rgba(200, 168, 97, 0) 38%,
-    rgba(232, 200, 130, 0.22) 50%,
-    rgba(200, 168, 97, 0) 62%
-  );
-  background-size: 250% 100%;
-  background-repeat: no-repeat;
-  background-position: -75% 0;
-  animation: cardShimmerSweep 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-.card-shimmer--hidden {
-  opacity: 0;
-}
-
-@keyframes cardShimmerSweep {
-  0%   { background-position: -75% 0; }
-  100% { background-position: 175% 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card-shimmer { transition: none; }
-  .card-shimmer::before { animation: none; }
-}
 
 /* ─── Landing astral chart wrapper ──────────────────────
    Desktop inset matches the inner gold frame. Phones get no chart at all — at
