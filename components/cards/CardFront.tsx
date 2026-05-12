@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { clsx } from "clsx";
 import type { Card } from "@/types";
 
@@ -26,10 +26,33 @@ export default function CardFront({ card, className, size = "flip" }: CardFrontP
   const isDetail = size === "detail";
   const r = 16;
 
-  // Track when the source AVIF finishes streaming so we can fade the shimmer
-  // overlay out instead of cutting it abruptly. Only matters for the detail
-  // size — the flip variant is hidden until the card-back rotates over.
-  const [loaded, setLoaded] = useState(false);
+  // The shimmer must only appear WHILE the image is loading — never as a
+  // post-load flash. Two pitfalls to avoid:
+  //   1. With `priority`, the browser preloads the image during HTML parse,
+  //      so by the time React hydrates the image is often already complete.
+  //      React's `onLoad` won't fire for an image that loaded before the
+  //      listener was attached — so we sync-check `img.complete` on mount.
+  //   2. SSR can't know whether the image will be cached; rendering shimmer
+  //      visible on the server caused a flash after hydration for fast
+  //      connections. Server renders the shimmer hidden; client decides.
+  const imgRef = useRef<HTMLImageElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const img = imgRef.current;
+    // `complete && naturalWidth > 0` is the reliable cross-browser test for
+    // "decoded successfully" (complete alone returns true for broken images).
+    if (img && img.complete && img.naturalWidth > 0) {
+      setImageLoaded(true);
+    }
+  }, []);
+
+  // Shimmer is visible only after hydration AND only while the image is
+  // still streaming. Cached images skip it entirely (mounted → already
+  // loaded → still hidden).
+  const shimmerVisible = isDetail && mounted && !imageLoaded;
 
   // For "detail" size we fill the parent so the parent can apply responsive
   // sizing (clamp / max-width / vw) without us hard-coding pixels.
@@ -66,17 +89,18 @@ export default function CardFront({ card, className, size = "flip" }: CardFrontP
         // directly from the edge. The bytes saved by extra resizing aren't
         // worth the latency for content this small.
         unoptimized
-        onLoadingComplete={() => setLoaded(true)}
+        ref={imgRef}
+        onLoad={() => setImageLoaded(true)}
       />
-      {/* Gold shimmer that sweeps diagonally across the placeholder while the
-          AVIF streams in, then fades out as soon as the image fires its load
-          event. Sits above the (blurred) image so it's visible during load
-          and disappears the moment the real card appears. Decorative — hidden
-          from assistive tech and disabled under prefers-reduced-motion. */}
+      {/* Gold shimmer that sweeps diagonally across the placeholder while
+          the AVIF streams in, then cross-fades out the moment the image
+          decodes. The element is always mounted (so the fade-out CSS
+          transition has something to animate) but starts at opacity 0 and
+          only becomes visible during the actual load window. */}
       {isDetail && (
         <div
           aria-hidden="true"
-          className={clsx("card-shimmer", loaded && "card-shimmer--hidden")}
+          className={clsx("card-shimmer", !shimmerVisible && "card-shimmer--hidden")}
           style={{ borderRadius: r }}
         />
       )}

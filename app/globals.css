@@ -8,6 +8,33 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Global scrollbar — thin gold to match the cosmic palette ─────────
+   Replaces the default OS bar so /card/[slug] (and any other page that
+   overflows the viewport) doesn't show a chunky white macOS/Windows
+   scrollbar against the dark theme. Firefox uses the standardised
+   `scrollbar-width / scrollbar-color`; WebKit / Blink need the
+   ::-webkit-scrollbar pseudo-elements. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200, 168, 97, 0.32) transparent;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(200, 168, 97, 0.28);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(200, 168, 97, 0.5);
+}
+/* Mobile Safari hides the system scrollbar by default — nothing to do
+   there. On desktop the rule above keeps the look consistent. */
+
 /* ─── Design Tokens (sourced from Figma) ────────────── */
 :root {
   /* ── Colors ─────────────────────────── */
