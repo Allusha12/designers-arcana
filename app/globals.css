@@ -134,6 +134,12 @@ html {
   --card-width:  219px;
   --card-height: 347px;
 
+  /* Deck card (idle stack + shuffling animation) shares dimensions with the
+     spread cards on desktop/tablet — overridden on phone below where the
+     spread is a tighter 2×2 grid and a single hero card can breathe larger. */
+  --deck-card-width:  var(--card-width);
+  --deck-card-height: var(--card-height);
+
   /* ── Layout ──────────────────────── */
   --header-height:   64px;
   --page-padding-x:  120px;
@@ -155,6 +161,11 @@ html {
   :root {
     --card-width:        140px;
     --card-height:       222px;
+    /* Deck idle / shuffling hero card lives on a screen by itself (no other
+       cards next to it) so we let it grow ~45% bigger than the spread cards.
+       Aspect ratio is preserved (200 × 200/0.629 = 318). */
+    --deck-card-width:   200px;
+    --deck-card-height:  318px;
     --page-padding-x:    20px;
     --header-height:     52px;
     --text-hero:         48px;
@@ -504,8 +515,10 @@ html {
 /* ─── Deck shuffle animation ────────────────────────── */
 .deck {
   position: relative;
-  width: var(--card-width);
-  height: var(--card-height);
+  /* Use the deck-specific token so a phone can show a larger hero card here
+     while keeping the spread grid (which uses --card-width) compact. */
+  width: var(--deck-card-width);
+  height: var(--deck-card-height);
   transform-origin: center center;
 }
 
