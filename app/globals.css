@@ -8,6 +8,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Card corner radius tokens ──────────────────────────
+   The painted illustrations have rounded corners baked in; the CSS clip
+   has to roughly match that arc so the cream painted border doesn't get
+   sliced off (or leave a dark sliver before our gold rim). Two tokens —
+   one for the smaller card back shown on /deck (and inside the flip),
+   one for the large detail card on /card/[slug]. Mobile values are
+   tuned so the visual radius matches the desktop look proportionally,
+   instead of looking exaggeratedly round on a 140 px-wide card. */
+:root {
+  --r-card-back: 16px;
+  --r-card-detail: 24px;
+}
+@media (max-width: 767px) {
+  :root {
+    --r-card-back: 10px;
+    --r-card-detail: 18px;
+  }
+}
+
 /* ─── Global scrollbar — thin gold to match the cosmic palette ─────────
    Replaces the default OS bar so /card/[slug] (and any other page that
    overflows the viewport) doesn't show a chunky white macOS/Windows
@@ -493,7 +512,7 @@ html {
 .deckCard {
   position: absolute;
   inset: 0;
-  border-radius: 16px;
+  border-radius: var(--r-card-back);
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   transform-origin: bottom center;

@@ -81,7 +81,7 @@ export default function DeckPage() {
                     />
                     <div
                       className="absolute inset-0 pointer-events-none"
-                      style={{ borderRadius: 16, border: "1px solid rgba(200,168,97,0.45)" }}
+                      style={{ borderRadius: "var(--r-card-back)", border: "1px solid rgba(200,168,97,0.45)" }}
                     />
                   </div>
                 ))}

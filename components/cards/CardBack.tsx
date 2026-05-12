@@ -12,7 +12,9 @@ export default function CardBack({ className, onClick, size = "idle" }: CardBack
   const isFill = size === "fill";
   const w = size === "spread" ? 208 : 219;
   const h = size === "spread" ? 329 : 347;
-  const r = size === "spread" ? 15 : 16;
+  // Use the shared --r-card-back token (responsive — smaller on phones) so
+  // the CSS clip lines up with the painted cream border on every breakpoint.
+  const r = "var(--r-card-back)";
 
   return (
     <div

@@ -24,7 +24,10 @@ const BLUR_PLACEHOLDER =
 
 export default function CardFront({ card, className, size = "flip" }: CardFrontProps) {
   const isDetail = size === "detail";
-  const r = 16;
+  // Pull from globals.css — detail uses the larger token (matches the design
+  // reference at /card/[slug]); the flip variant on /deck shares the back-card
+  // token so the front/back radii are visually consistent during the flip.
+  const r = isDetail ? "var(--r-card-detail)" : "var(--r-card-back)";
 
   // The shimmer must only appear WHILE the image is loading — never as a
   // post-load flash. Two pitfalls to avoid:
