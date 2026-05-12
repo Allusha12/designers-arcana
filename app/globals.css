@@ -367,16 +367,15 @@
 }
 
 /* ─── Landing astral chart wrapper ──────────────────────
-   Default desktop inset matches the inner gold frame. On phones the chart is
-   pulled in further so it stops competing with the (much larger relative) hero
-   text — and its lower opacity keeps it as ambient backdrop, not foreground. */
+   Desktop inset matches the inner gold frame. Phones get no chart at all — at
+   that size, even a dimmed/shrunk version sits behind the hero text and reads
+   as visual noise. The cosmic vibe is carried by shooting stars + comets. */
 .astral-chart-wrap {
   inset: 50px;
 }
 @media (max-width: 767px) {
   .astral-chart-wrap {
-    inset: clamp(80px, 22vw, 140px);
-    opacity: 0.55;
+    display: none;
   }
 }
 
