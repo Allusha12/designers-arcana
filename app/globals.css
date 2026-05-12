@@ -369,12 +369,24 @@
 /* ─── Landing astral chart wrapper ──────────────────────
    Desktop inset matches the inner gold frame. Phones get no chart at all — at
    that size, even a dimmed/shrunk version sits behind the hero text and reads
-   as visual noise. The cosmic vibe is carried by shooting stars + comets. */
+   as visual noise. */
 .astral-chart-wrap {
   inset: 50px;
 }
+
+/* ─── Mobile: silence all ambient cosmic motion ──────────
+   Comet streaks (200px gold gradients) and shooting stars are sized for
+   1440+ desktop. On a 375px phone they read as misplaced gold sticks
+   poking out of cards or the page edge — users mistake them for clipped
+   borders. Hide the whole layer below 768px and let the pure black
+   background carry the mood. */
 @media (max-width: 767px) {
-  .astral-chart-wrap {
+  .astral-chart-wrap,
+  .flying-comet,
+  .shooting-star,
+  .comet,
+  .constellationStar,
+  .constellationLine {
     display: none;
   }
 }

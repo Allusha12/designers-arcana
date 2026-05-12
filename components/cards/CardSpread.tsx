@@ -69,14 +69,17 @@ export default function CardSpread({ cardSlugs, onPick }: CardSpreadProps) {
         className="md:hidden grid grid-cols-2 gap-x-4 gap-y-5 mx-auto shrink-0"
         style={{ width: "calc(2 * var(--card-width) + 16px)", maxWidth: "100%" }}
       >
-        {phoneSlugs.map((slug, i) => (
+        {phoneSlugs.map((slug) => (
+          // No animationDelay stagger here. With four cards in a 2×2 grid, a
+          // staggered drop made the bottom row finish noticeably later than
+          // the top row — users read that as misaligned levels. Animating all
+          // four in unison reads as one synchronised reveal.
           <div
             key={slug}
             className="dealCardGrid"
             style={{
               width: "var(--card-width)",
               height: "var(--card-height)",
-              animationDelay: `${i * 70}ms`,
             }}
           >
             <CardBack size="fill" onClick={() => onPick(slug)} />
