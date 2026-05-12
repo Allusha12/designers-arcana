@@ -53,10 +53,9 @@ export default function CardFront({ card, className, size = "flip" }: CardFrontP
         // real image, so the page feels instant.
         placeholder="blur"
         blurDataURL={BLUR_PLACEHOLDER}
-        // Painted illustrations with soft gradients — q65 is visually
-        // indistinguishable from the default q75 here but saves ~20–25% bytes
-        // per generated variant.
-        quality={isDetail ? 65 : 75}
+        // Default quality (75). The source is already an AVIF q88 (preprocessed
+        // by scripts/optimize-cards.mjs), so the heavy lifting is done — extra
+        // compression at delivery time risks double-encoding artifacts.
       />
       <div
         className="absolute inset-0 pointer-events-none"

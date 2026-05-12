@@ -72,7 +72,7 @@ export default function DeckPage() {
                 {[0, 1, 2].map((layer) => (
                   <div key={layer} className="deckCard" data-layer={layer}>
                     <Image
-                      src="/cards/back.png"
+                      src="/cards/back.avif"
                       alt=""
                       fill
                       sizes="(max-width: 767px) 140px, (max-width: 1023px) 175px, 219px"

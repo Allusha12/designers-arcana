@@ -4,7 +4,7 @@ export interface Card {
   name: string;       // Ukrainian card name
   meaning: string;    // Situation / context description
   advice: string;     // Actionable advice
-  image: string;      // Path: /cards/<filename>.png
+  image: string;      // Path: /cards/<filename>.avif
 }
 
 export interface HistoryEntry {

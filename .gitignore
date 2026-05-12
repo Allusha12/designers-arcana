@@ -9,3 +9,7 @@ dist/
 # Playwright
 /playwright-report/
 /test-results/
+
+# Card image originals — preserved locally as a rollback safety net for the
+# AVIF optimisation pass (scripts/optimize-cards.mjs --restore). Not shipped.
+/public/cards-original/

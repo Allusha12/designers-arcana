@@ -29,7 +29,7 @@ export default function CardBack({ className, onClick, size = "idle" }: CardBack
       onKeyDown={onClick ? (e) => e.key === "Enter" && onClick() : undefined}
     >
       <Image
-        src="/cards/back.png"
+        src="/cards/back.avif"
         alt="Зворотня сторона карти"
         fill
         sizes={`${w}px`}
