@@ -27,14 +27,16 @@ export default function CardDetail({ card }: CardDetailProps) {
   return (
     <div className="relative w-full flex flex-col items-center">
       {/* ── Desktop layout: 3-column.
-          On lg (1024–1279, iPad landscape) we shrink the card and tighten the
-          surrounding gaps so the CTA stays inside the viewport at ~820px tall.
-          On xl (1280+) we restore the full Figma sizes. */}
-      <div className="hidden lg:grid w-full px-[var(--page-padding-x)] mt-4 xl:mt-8"
+          Compact treatment now covers the whole lg → 2xl-1 range (1024–1439).
+          iPad Pro 12.9" landscape (1366) and most 13–15" laptops live in xl
+          but only have ~700–870 px of vertical viewport — keeping the full
+          374×594 Figma card there pushed the CTA off-screen. Real desktops
+          at 2xl (1440+ in our config) still get the full hero treatment. */}
+      <div className="hidden lg:grid w-full px-[var(--page-padding-x)] mt-4 2xl:mt-8"
         style={{ gridTemplateColumns: "324px 1fr 324px", gap: "0 0" }}>
 
         {/* Left — ЗНАЧЕННЯ */}
-        <div className="flex flex-col gap-[25px] pt-10 xl:pt-[67px]">
+        <div className="flex flex-col gap-[25px] pt-10 2xl:pt-[67px]">
           <div>
             <span className="text-label block mb-[17px]">ЗНАЧЕННЯ</span>
             <div className="h-px w-[120px]" style={{ backgroundColor: "rgba(200,168,97,0.55)" }} />
@@ -44,14 +46,14 @@ export default function CardDetail({ card }: CardDetailProps) {
 
         {/* Center — card flip with corner branches glued to the corners */}
         <div className="flex flex-col items-center gap-6">
-          <div className="relative w-[320px] xl:w-[374px] aspect-[374/594]">
+          <div className="relative w-[320px] 2xl:w-[374px] aspect-[374/594]">
             <CardFlip card={card} isFlipped={isFlipped} />
             <CardCornerBranches />
           </div>
         </div>
 
         {/* Right — ПОРАДА */}
-        <div className="flex flex-col gap-[25px] pt-10 xl:pt-[67px]">
+        <div className="flex flex-col gap-[25px] pt-10 2xl:pt-[67px]">
           <div>
             <span className="text-label block mb-[17px]">ПОРАДА</span>
             <div className="h-px w-[120px]" style={{ backgroundColor: "rgba(200,168,97,0.55)" }} />
@@ -88,9 +90,11 @@ export default function CardDetail({ card }: CardDetailProps) {
         </div>
       </div>
 
-      {/* ── CTA — shared. Tight gap on lg (iPad landscape) so the button stays
-          on-screen at short viewports; restored to the Figma 76px on xl. ── */}
-      <div className="mt-10 lg:mt-10 xl:mt-[76px] mb-6 lg:mb-6 xl:mb-8 w-full flex justify-center px-[var(--page-padding-x)]">
+      {/* ── CTA — shared. Tight gap on every viewport short of 2xl so the
+          button stays on-screen on iPads and 13–15" laptops; restored to the
+          Figma 76 px gap only on 1440+ desktops where height is no longer a
+          constraint. ── */}
+      <div className="mt-10 2xl:mt-[76px] mb-6 2xl:mb-8 w-full flex justify-center px-[var(--page-padding-x)]">
         <Button label="ВИТЯГНУТИ ЩЕ" href="/deck" />
       </div>
     </div>
