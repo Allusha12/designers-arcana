@@ -39,8 +39,12 @@ export default function CardDetailPage({ params }: Props) {
 
       <div className="relative z-10 flex flex-col min-h-screen">
         <Header showBack backHref="/deck" />
-        {/* Stretch CardDetail to fill remaining height so the card centers on the astral wheel */}
-        <div className="flex-1 flex flex-col justify-center">
+        {/* Stretch CardDetail to fill remaining height so the card centers on
+            the astral wheel. On the compact iPad / small-laptop range (lg →
+            2xl-1) the composition feels low after we shrank the card — nudge
+            it up 20 px so there's more visible breathing room under the CTA.
+            Real desktops at 2xl (1440+) keep the original centered position. */}
+        <div className="flex-1 flex flex-col justify-center lg:-translate-y-5 2xl:translate-y-0">
           <CardDetail card={card} />
         </div>
       </div>
