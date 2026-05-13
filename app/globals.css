@@ -17,13 +17,13 @@
    tuned so the visual radius matches the desktop look proportionally,
    instead of looking exaggeratedly round on a 140 px-wide card. */
 :root {
-  --r-card-back: 12px;
-  --r-card-detail: 16px;
+  --r-card-back: 6px;
+  --r-card-detail: 8px;
 }
 @media (max-width: 767px) {
   :root {
-    --r-card-back: 7px;
-    --r-card-detail: 12px;
+    --r-card-back: 4px;
+    --r-card-detail: 5px;
   }
 }
 
