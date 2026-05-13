@@ -32,7 +32,7 @@ export default function CardDetail({ card }: CardDetailProps) {
           but only have ~700–870 px of vertical viewport — keeping the full
           374×594 Figma card there pushed the CTA off-screen. Real desktops
           at 2xl (1440+ in our config) still get the full hero treatment. */}
-      <div className="hidden lg:grid w-full px-[var(--page-padding-x)] mt-4 2xl:mt-8"
+      <div className="hidden lg:grid w-full max-w-[var(--content-max-w)] mx-auto px-[var(--page-padding-x)] mt-4 2xl:mt-8"
         style={{ gridTemplateColumns: "324px 1fr 324px", gap: "0 0" }}>
 
         {/* Left — ЗНАЧЕННЯ */}
@@ -94,7 +94,7 @@ export default function CardDetail({ card }: CardDetailProps) {
           button stays on-screen on iPads and 13–15" laptops; restored to the
           Figma 76 px gap only on 1440+ desktops where height is no longer a
           constraint. ── */}
-      <div className="mt-10 2xl:mt-[76px] mb-6 2xl:mb-8 w-full flex justify-center px-[var(--page-padding-x)]">
+      <div className="mt-10 2xl:mt-[76px] mb-6 2xl:mb-8 w-full max-w-[var(--content-max-w)] mx-auto flex justify-center px-[var(--page-padding-x)]">
         <Button label="ВИТЯГНУТИ ЩЕ" href="/deck" />
       </div>
     </div>
