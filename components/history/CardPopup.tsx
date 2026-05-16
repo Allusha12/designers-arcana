@@ -95,7 +95,11 @@ export default function CardPopup({ card, onClose }: CardPopupProps) {
                 style={{
                   width: "min(290px, 70vw)",
                   aspectRatio: "374 / 594",
-                  borderRadius: 16,
+                  // Match the /card/[slug] detail card — the painted cream
+                  // frame on every illustration has very tight corners, so
+                  // the CSS clip needs to be near-square too. Same token as
+                  // CardFront size="detail".
+                  borderRadius: "var(--r-card-detail)",
                   overflow: "hidden",
                   border: "1px solid rgba(200,168,97,0.45)",
                   boxShadow: "0 0 32px rgba(0,0,0,0.55)",
